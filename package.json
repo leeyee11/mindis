@@ -1,0 +1,33 @@
+{
+  "name": "mindis",
+  "version": "0.0.1",
+  "description": "A mind map application based on zrender",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack -w & serve ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leeyee11/mindis.git"
+  },
+  "keywords": [
+    "mind",
+    "map"
+  ],
+  "author": "lyy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leeyee11/mindis/issues"
+  },
+  "homepage": "https://github.com/leeyee11/mindis#readme",
+  "dependencies": {
+    "electron": "^7.0.1",
+    "serve": "^11.2.0",
+    "webpack": "^4.41.2",
+    "zrender": "^4.1.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.10"
+  }
+}
