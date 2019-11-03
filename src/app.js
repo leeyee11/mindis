@@ -12,7 +12,7 @@ import {node} from './node';
     const root=new node({});
     zr.add(root.getNode());
 
-        zr.dragData={drag:false,pos:[0,0],group:null,target:null};
+    zr.dragData={drag:false,pos:[0,0],group:null,target:null};
     zr.on('mousedown', function(e) {
         zr.dragData.pos=[e.event.zrX,e.event.zrY];
         zr.dragData.target=e.target;

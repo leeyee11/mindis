@@ -30,7 +30,7 @@ export function node({parent,postion,content}){
             _curve=new zrender.BezierCurve({
                 shape:{
                     x1:begin[0],y1:begin[1],x2:end[0],y2:end[1],
-                    cx1:a[0],cy1:a[1],cx2:b[0],cy2:b[1]
+                    cpx1:a[0],cpy1:a[1],cpx2:b[0],cpy2:b[1]
                 },
                 style:{
                     stroke:'#25c6fc'
@@ -150,7 +150,7 @@ export function node({parent,postion,content}){
             _curve.attr({                
                 shape:{
                     x1:begin[0],y1:begin[1],x2:end[0],y2:end[1],
-                    cx1:a[0],cy1:a[1],cx2:b[0],cy2:b[1]
+                    cpx1:a[0],cpy1:a[1],cpx2:b[0],cpy2:b[1]
                 }
             })
         }   
