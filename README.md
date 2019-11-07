@@ -6,4 +6,3 @@ Run this app:
 2.npm run start
 
 Live Demo: http://mindis.best
-
