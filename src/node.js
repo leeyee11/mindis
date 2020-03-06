@@ -1,12 +1,12 @@
-import zrender from 'zrender';
+import zrender from 'zrender'
 
 export function node({ parent, postion, content }) {
-    const defaultSpacing = [120, 72];
-    const rect = [240, 48];
-    const _node = new zrender.Group();
-    const _parent = parent;
-    const _children = [];
-    let _curve;
+    const defaultSpacing = [120, 72]
+    const rect = [240, 48]
+    const _node = new zrender.Group()
+    const _parent = parent
+    const _children = []
+    let _curve
     const self = {
         _node,
         _parent,
@@ -14,54 +14,56 @@ export function node({ parent, postion, content }) {
         getNode,
         getParent,
         getChildAt,
-        addChild,
         removeChild,
+        withCurve,
         remove
     }
-    if (getParent()) {
-        setTimeout(() => {
-            const spos = getNode().position;
-            const offset = [spos[0] - rect[0], spos[1]];
-            const begin = [0, rect[1] / 2];
-            const end = [-offset[0], -offset[1] + rect[1] / 2]
-            const a = [(begin[0] + end[0]) / 2, begin[1]]
-            const b = [(begin[0] + end[0]) / 2, end[1]]
-            _curve = new zrender.BezierCurve({
-                shape: {
-                    x1: begin[0], y1: begin[1], x2: end[0], y2: end[1],
-                    cpx1: a[0], cpy1: a[1], cpx2: b[0], cpy2: b[1]
-                },
-                style: {
-                    stroke: '#25c6fc'
-                }
-            })
-            getNode().add(_curve);
-        }, 10)
-    }
     function getNode() {
-        return _node;
+        return _node
     }
     function getParent() {
-        return _parent;
+        return _parent
     }
     function getChildren() {
-        return _children;
+        return _children
     }
     function getChildAt(i) {
-        return getChildren()[i];
+        return getChildren()[i]
     }
     function addChild(child) {
-        _children.push(child);
+        _children.push(child)
         _node.add(child.getNode())
     }
     function removeChild(child) {
         _children.splice(_children.indexOf(child), 1)
-        getNode().remove(child.getNode());
+        getNode().remove(child.getNode())
     }
     function remove() {
         if (getParent()) {
-            getParent().removeChild(self);
+            getParent().removeChild(self)
         }
+    }
+    function calcCurveShape() {
+        const spos = getNode().position
+        const offset = [spos[0] - rect[0], spos[1]]
+        const [x1, y1] = [0, rect[1] / 2]
+        const [x2, y2] = [-offset[0], -offset[1] + rect[1] / 2]
+        const [cpx1, cpy1] = [(x1 + x2) / 2, y1]
+        const [cpx2, cpy2] = [(x1 + x2) / 2, y2]
+
+        return { x1, y1, x2, y2, cpx1, cpy1, cpx2, cpy2 }
+    }
+    function withCurve() {
+        if (getParent()) {
+            _curve = new zrender.BezierCurve({
+                shape: calcCurveShape(),
+                style: {
+                    stroke: '#25c6fc'
+                }
+            })
+            getNode().add(_curve)
+        }
+        return self
     }
 
 
@@ -80,11 +82,11 @@ export function node({ parent, postion, content }) {
         }
     })
     body.on('click', () => {
-        const text = window.prompt('Update node content below : ', body.style.text);
+        const text = window.prompt('Update node content below : ', body.style.text)
         if (text) {
-            body.attr({ 'style': { 'text': text } });
+            body.attr({ 'style': { 'text': text } })
         }
-    });
+    })
     const addbtn = new zrender.Circle({
         shape: {
             cx: 216,
@@ -100,7 +102,7 @@ export function node({ parent, postion, content }) {
         }
     })
     addbtn.on('click', () => {
-        const child = window.prompt('Input child node content below : ', 'Empty');
+        const child = window.prompt('Input child node content below : ', 'Empty')
         if (child) {
             const pos = getChildren().length > 0
                 ? [
@@ -110,13 +112,13 @@ export function node({ parent, postion, content }) {
                 : [
                     defaultSpacing[0] + rect[0],
                     0
-                ];
+                ]
 
             addChild(new node({
                 parent: self,
                 postion: pos,
                 content: child
-            }));
+            }))
         }
     })
     const rmbtn = new zrender.Circle({
@@ -135,30 +137,21 @@ export function node({ parent, postion, content }) {
     })
     rmbtn.on('click', () => {
         if (window.confirm('Delete ?')) {
-            remove();
+            remove()
         }
     })
     _node.updateCurve = function () {
         if (_curve) {
-            const spos = getNode().position;
-            const offset = [spos[0] - rect[0], spos[1]];
-            const begin = [0, rect[1] / 2];
-            const end = [-offset[0], -offset[1] + rect[1] / 2]
-            const a = [(begin[0] + end[0]) / 2, begin[1]]
-            const b = [(begin[0] + end[0]) / 2, end[1]]
             _curve.attr({
-                shape: {
-                    x1: begin[0], y1: begin[1], x2: end[0], y2: end[1],
-                    cpx1: a[0], cpy1: a[1], cpx2: b[0], cpy2: b[1]
-                }
+                shape: calcCurveShape()
             })
         }
     }
 
-    getNode().add(body);
-    getNode().add(addbtn);
-    getNode().add(rmbtn);
+    getNode().add(body)
+    getNode().add(addbtn)
+    getNode().add(rmbtn)
     getNode().attr('position', postion || [0, 0])
 
-    return self;
+    return self.withCurve()
 }
